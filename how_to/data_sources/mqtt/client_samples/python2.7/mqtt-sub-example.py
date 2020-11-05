@@ -29,11 +29,11 @@ def main():
     global Connected
     Connected = False
     # IP address of the edge. Modify this.
-    broker_address= "<edge_ip>"
+    broker_address= "10.42.10.83"
     port = 1883
     # NOTE: For data pipelines to receive MQTT messages, topic should
     #       be the same as that specified when creating the MQTT datasource.
-    topic = "test"
+    topic = "shuchida-dp-mqtt-mqtt"
 
     client = mqttClient.Client()
     # Set callbacks for connection event, publish event and message receive event
@@ -45,21 +45,7 @@ def main():
     client.tls_insecure_set(True)
     client.connect(broker_address, port=port)
     client.subscribe(topic)
-    client.loop_start()
-
-    # Wait for connection
-    while Connected != True:    
-        print "Connecting..."
-        time.sleep(1)
-
-
-    try:
-        client.publish(topic, "Hello, World!")
-        time.sleep(5)
-    except KeyboardInterrupt:
-        client.disconnect()
-        client.loop_stop()
+    client.loop_forever()
 
 if __name__ == "__main__":
     main()
-

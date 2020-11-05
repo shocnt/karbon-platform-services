@@ -1,6 +1,6 @@
 kind: dataSource
-name: ex_nats
-svcDomain: <Service Domain>
+name: ex-nats
+svcDomain: shuchida-kps-sd-ahv
 protocol: DATAINTERFACE
 type: Sensor
 authType: CERTIFICATE
@@ -11,10 +11,12 @@ ifcInfo:
   protocol: nats
   ports:
     - name: nats
-      port: 4222
+      port: 30091
 edge: myprovideredge
 fields:
 - name: topic
-  topic: "<Device Topic>"
+  topic: "shuchida-nats-input"
+- name: host
+  topic: "natshost-10.42.10.83"
 - name: port
-  topic: "natsport-4222"
+  topic: "natsport-30091"

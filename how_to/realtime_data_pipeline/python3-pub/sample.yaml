@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: pubnats-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: pubnats
+      labels:
+        app: pubnats
+    spec:
+      containers:
+      - name: pubnats
+        imagePullPolicy: Always
+        image: shocnt/pubnats:latest
+        env:
+        - name: TOPIC
+          value: shuchida-dp-nats-in
+        command:
+        - sh
+        - -c
+        - "exec python3 main.py"

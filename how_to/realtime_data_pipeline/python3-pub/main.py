@@ -3,16 +3,21 @@ import os
 import signal
 from nats.aio.client import Client as NATS
 import datastream_pb2
+import sys
+import logging
+import time
 
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 natsURL = "nats://nats:4222"
-topic = "datapipeline-demo"
+topic = os.environ['TOPIC']
 
 def run(loop):
     nc = NATS()
+
     @asyncio.coroutine
     def closed_cb():
-        print("Connection to NATS is closed.")
+        logging.info("Connection to NATS is closed.")
         yield from asyncio.sleep(0.1, loop=loop)
         loop.stop()
 
@@ -23,26 +28,23 @@ def run(loop):
     }
 
     yield from nc.connect(**options)
-    print("Connected to NATS at {}...".format(nc.connected_url.netloc))
-
-    @asyncio.coroutine
-    def subscribe_handler(msg):
-        datastreamMsg = datastream_pb2.DataStreamMessage()
-        datastreamMsg.ParseFromString(msg.data)
-        print("Received a message on {data}".format(data=datastreamMsg.payload))
-
-    yield from nc.subscribe(topic, cb=subscribe_handler)
-    print("Subscribed to topic: {}".format(topic))
+    logging.info("Connected to NATS at {}...".format(nc.connected_url.netloc))
 
     def signal_handler():
         if nc.is_closed:
             return
-        print("Disconnecting...")
+        logging.info("Disconnecting...")
         loop.create_task(nc.close())
 
     for sig in ('SIGINT', 'SIGTERM'):
         loop.add_signal_handler(getattr(signal, sig), signal_handler)
 
+    while True:
+        msg = str(time.time())
+        logging.info("Publishing to NATS topic: " + topic)
+        logging.info("Publishing msg: " + msg)
+        yield from nc.publish(topic, msg.encode())
+        yield from asyncio.sleep(5, loop=loop)
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
