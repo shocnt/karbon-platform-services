@@ -13,10 +13,10 @@ spec:
       containers:
       - name: subnats
         imagePullPolicy: Always
-        image: shocnt/subscribe-nats:latest
+        image: shocnt/subnats:latest
         env:
         - name: TOPIC
-          value: nutanix
+          value: shuchida-dp-nats-in
         command:
         - sh
         - -c

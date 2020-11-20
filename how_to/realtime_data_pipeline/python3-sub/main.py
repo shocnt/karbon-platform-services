@@ -2,7 +2,6 @@ import asyncio
 import os
 import signal
 from nats.aio.client import Client as NATS
-import datastream_pb2
 import sys
 import logging
 
@@ -30,12 +29,8 @@ def run(loop):
 
     @asyncio.coroutine
     def subscribe_handler(msg):
-        datastreamMsg = datastream_pb2.DataStreamMessage()
-        datastreamMsg.ParseFromString(msg.data)
-        logging.info("Receiving from NATS topic: {}".format(topic))
-        logging.info("Receiving msg: {}".format(msg.data))
-        logging.info("Receiving msg: {}".format(datastreamMsg))
-        logging.info("Receiving msg: {}".format(datastreamMsg.payload))
+        logging.info("Receiving from NATS topic: {}".format(msg.subject))
+        logging.info("Receiving data: {}".format(msg.data.decode()))
 
     yield from nc.subscribe(topic, cb=subscribe_handler)
     logging.info("Subscribed to topic: {}".format(topic))

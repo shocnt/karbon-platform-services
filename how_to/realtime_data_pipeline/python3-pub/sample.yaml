@@ -13,10 +13,10 @@ spec:
       containers:
       - name: pubnats
         imagePullPolicy: Always
-        image: shocnt/pubnats:latest
+        image: shocnt/publish-nats:latest
         env:
         - name: TOPIC
-          value: shuchida-dp-nats-in
+          value: nutanix
         command:
         - sh
         - -c

@@ -2,6 +2,7 @@ import asyncio
 import os
 import signal
 from nats.aio.client import Client as NATS
+import datastream_pb2
 import sys
 import logging
 import time

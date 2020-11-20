@@ -1,22 +1,22 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: subnats-deployment
+  name: pubnats-deployment
 spec:
   replicas: 1
   template:
     metadata:
-      name: subnats
+      name: pubnats
       labels:
-        app: subnats
+        app: pubnats
     spec:
       containers:
-      - name: subnats
+      - name: pubnats
         imagePullPolicy: Always
-        image: shocnt/subscribe-nats:latest
+        image: shocnt/pubnats:latest
         env:
         - name: TOPIC
-          value: nutanix
+          value: shuchida-dp-nats-in
         command:
         - sh
         - -c
