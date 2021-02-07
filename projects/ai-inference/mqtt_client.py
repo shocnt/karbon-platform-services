@@ -43,7 +43,7 @@ def main():
 	# Set this to ignore hostname only. TLS is still valid with this setting.
 	client.tls_insecure_set(True)
 	client.connect(broker_address, port=port)
-	client.subscribe(outpu_topic)
+	client.subscribe(output_topic)
 	client.loop_start()
 
 	# Wait for connection

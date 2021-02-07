@@ -38,17 +38,16 @@ def run(loop):
     for sig in ('SIGINT', 'SIGTERM'):
         loop.add_signal_handler(getattr(signal, sig), signal_handler)
 
-    while True:
-        msg = str(time.time())
-        logging.info("Publishing to NATS topic: " + topic)
-        logging.info("Publishing msg: " + msg)
-        yield from nc.publish(topic, msg.encode())
-        yield from asyncio.sleep(5, loop=loop)
+    msg = str(sys.argv[1])
+    logging.info("Publishing to NATS topic: " + topic)
+    logging.info("Publishing msg: " + msg)
+    yield from nc.publish(topic, msg.encode())
+    yield from nc.flush()
+    yield from nc.close()
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(run(loop))
     try:
-        loop.run_forever()
+        loop.run_until_complete(run(loop))
     finally:
         loop.close()
