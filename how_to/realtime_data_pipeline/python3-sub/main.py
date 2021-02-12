@@ -4,6 +4,7 @@ import signal
 from nats.aio.client import Client as NATS
 import sys
 import logging
+import json
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)	
 
@@ -30,7 +31,10 @@ def run(loop):
     @asyncio.coroutine
     def subscribe_handler(msg):
         logging.info("Receiving from NATS topic: {}".format(msg.subject))
-        logging.info("Receiving data: {}".format(msg.data.decode()))
+        json_raw = json.loads(msg.data.decode())
+        timestamp = json_raw['timestamp']
+        status = json_raw['status']
+        logging.info("timestamp: {}, status: {}".format(timestamp, status))
 
     yield from nc.subscribe(topic, cb=subscribe_handler)
     logging.info("Subscribed to topic: {}".format(topic))
