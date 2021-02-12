@@ -44,7 +44,8 @@ def run(loop):
         loop.add_signal_handler(getattr(signal, sig), signal_handler)
 
     while(True):
-        timestamp = str(datetime.now(JST))
+        dt = datetime.now(JST)
+        timestamp = dt.strftime("%Y-%m-%d %H:%M:%S:%f")
         status = str(random.randint(0,1))
         msg = json.dumps({"timestamp": timestamp, "status": status}) 
 
