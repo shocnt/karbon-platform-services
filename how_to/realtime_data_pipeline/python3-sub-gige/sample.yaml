@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: subnats-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: subnats
+      labels:
+        app: subnats
+    spec:
+      containers:
+      - name: subnats
+        imagePullPolicy: Always
+        image: shocnt/subscribe-nats:latest
+        env:
+        - name: TOPIC
+          value: nutanix
+        command:
+        - sh
+        - -c
+        - "exec python3 main.py"
